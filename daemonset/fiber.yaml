@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fiber-daemonset
+  labels:
+    app: daemon-fiber
+spec:
+  selector:
+    matchLabels:
+      app: daemon-fiber
+  template:
+    metadata:
+      labels:
+        app: daemon-fiber
+    spec:
+      containers:
+      - name: fiber-container
+        image: malektih/gofiber:1.0.1
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+          timeoutSeconds: 2

@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: timezone-job
+spec:
+  schedule: "* * * * *" # This cron job runs every minute
+  timeZone: Asia/Tokyo
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: job-task
+            image: alpine:latest
+            command: [ "sh", "-c", "apk add --no-cache tzdata && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && date; echo Hello from Japan!" ]
+          restartPolicy: Never

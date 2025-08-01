@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: fastcampus
+  name: gofiber-probe
+spec:
+  containers:
+  - name: gofiber-probe
+    image: malektih/gofiber:1.0.1
+    ports:
+    - containerPort: 8080
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 8080
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 8080
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 3
+    startupProbe:
+      httpGet:
+        path: /
+        port: 8080
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 1
+      successThreshold: 1
+      failureThreshold: 3

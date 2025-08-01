@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: go-statefulset-volume
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 10Mi
+  hostPath:
+    path: /data/location
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: go-statefulset
+  labels:
+    app: go-statefulset
+spec:
+  serviceName: go-statefulset-service
+  replicas: 2
+  selector:
+    matchLabels:
+      app: go-fiber-statefulset
+  template:
+    metadata:
+      labels:
+        app: go-fiber-statefulset
+    spec:
+      containers:
+      - name: go-container
+        image: kowlon/go-echo:v2
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        volumeMounts:
+        - name: go-statefulset-volume-claim
+          mountPath: /app/data
+  volumeClaimTemplates:
+  - metadata:
+      name: go-statefulset-volume-claim
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Mi

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gofiber-deployment
+  labels:
+    app: gofiber
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gofiber
+  template:
+    metadata:
+      labels:
+        app: gofiber
+    spec:
+      containers:
+        - name: gofiber-container
+          image: malektih/gofiber:1.0.0
+          env:
+            - name: ENV
+              value: staging
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gofiber-service
+spec:
+  selector:
+    app: gofiber
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer  

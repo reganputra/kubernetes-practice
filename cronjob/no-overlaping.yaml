@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: no-overlapping-job
+spec:
+  schedule: "* * * * *" # This cron job runs every minute
+  concurrencyPolicy: Forbid # Ensures no overlapping executions
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: job-task
+            image: busybox
+            command: [ "sh", "-c", "date; echo this job will run for 120 seconds; sleep 120" ]
+          restartPolicy: Never

@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: schedule-job
+spec:
+  schedule: "*/1 * * * *" # This cron job runs every one minute
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: job-task
+            image: busybox
+            command: [ "sh", "-c", "date;  echo 'CronJob is running'" ]
+          restartPolicy: Never

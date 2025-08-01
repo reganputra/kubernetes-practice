@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: fastcampus
+  name: pod-gofiber
+  labels:
+    app: gofiber
+spec:
+ containers:
+ - name: gofiber-container
+   image: malektih/gofiber:1.0.1
+   ports:
+   - containerPort: 8080    

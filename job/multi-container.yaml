@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: multi-container-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: init-container
+        image: busybox
+        command: ["sh", "-c", "echo This is the init container;"]
+      - name: main-task
+        image: busybox
+        command: ["sh", "-c", "echo This is the main task;"]
+      restartPolicy: Never
