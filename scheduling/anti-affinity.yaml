@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anti-affinity-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: go-anti-affinity
+  template:
+    metadata:
+      labels:
+        app: go-anti-affinity
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - go-anti-affinity
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: go-anti-affinity
+        image: kowlon/go-echo:v2
+        ports:
+        - containerPort: 8080
