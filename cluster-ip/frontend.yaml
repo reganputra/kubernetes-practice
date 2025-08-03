@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bash-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bash-frontend
+  template:
+    metadata:
+      labels:
+        app: bash-frontend
+    spec:
+      containers:
+      - name: curl-container
+        image: alpine:latest
+        command: [ "sh", "-c", "apk add --no-cache curl && sh /scripts/curl-script.sh" ]
+        volumeMounts:
+        - name: scripts-volume
+          mountPath: /scripts
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "32Mi"
+          limits:
+            cpu: "100m"
+            memory: "256Mi"
+      volumes:
+      - name: scripts-volume
+        configMap:
+          name: curl-scripts-config
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: curl-scripts-config
+data:
+  curl-script.sh: |
+    #!/bin/sh
+    while true; do
+    response=$(curl -s http://backend-service:8080)
+    echo "Response from backend: $response"
+    sleep 5
+    done
