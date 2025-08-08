@@ -27,3 +27,7 @@ Workload resources configure controllers that make sure the right number of the 
 - **StatefulSet** lets you run one or more related Pods that do track state.
 - **DaemonSet** defines Pods that provide node-local facilities.
 - **Job** and **CronJob** define tasks that run to completion and then stop.
+
+## How to run Kubernetes locally?
+
+Read Markdown file, name `how-to-use-k8s-locally.md`
